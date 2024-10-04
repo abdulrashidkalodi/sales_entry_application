@@ -1,12 +1,12 @@
 import React from "react";
-import HeaderForm from "./HeaderForm";
-import HeaderFilter from "./HeaderFilter";
+import CreateNewCompany from "../../../component/CreateNewCompany";
+import HeaderProfile from "../../../component/HeaderProfile";
 
 const HeaderSection = () => {
   return (
     <>
-      <HeaderForm />
-      {/* <HeaderFilter /> */}
+      <CreateNewCompany />
+      {/* <HeaderProfile/> */}
     </>
   );
 };
