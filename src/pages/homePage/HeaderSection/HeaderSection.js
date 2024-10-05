@@ -5,8 +5,8 @@ import HeaderProfile from "../../../component/HeaderProfile";
 const HeaderSection = () => {
   return (
     <>
-      <CreateNewCompany />
-      {/* <HeaderProfile/> */}
+      {/* <CreateNewCompany /> */}
+      <HeaderProfile/>
     </>
   );
 };
