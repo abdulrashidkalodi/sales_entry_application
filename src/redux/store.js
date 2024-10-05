@@ -1,13 +1,11 @@
 import { configureStore } from '@reduxjs/toolkit';
 import headerReducer from './slices/headerSlice';
-// import detailReducer from './slices/detailSlice';
-// import itemReducer from './slices/itemSlice';
+// import detailsReducer from './slices/detailsSlice';
 
 const store = configureStore({
   reducer: {
     header: headerReducer,
-    // detail: detailReducer,
-    // item: itemReducer,
+    // details: detailsReducer,
   },
 });
 
