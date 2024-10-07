@@ -1,10 +1,13 @@
+// store.js
 import { configureStore } from '@reduxjs/toolkit';
-import headerReducer from './slices/headerSlice'; // Make sure your reducer is imported correctly
+import headerReducer from './slices/headerSlice'; 
+import detailsReducer from './slices/detailsSlice';
 
 const store = configureStore({
   reducer: {
-    header: headerReducer, // Add all your slices/reducers here
+    header: headerReducer,
+    details: detailsReducer,
   },
 });
 
-export default store;  // This is important, make sure you use `export default`
+export default store;

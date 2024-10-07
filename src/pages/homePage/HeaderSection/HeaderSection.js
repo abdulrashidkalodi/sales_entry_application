@@ -13,7 +13,7 @@ import CardContent from "@mui/material/CardContent";
 import HeaderFilter from "../../../component/HeaderFilter";
 import { fetchHeader } from "../../../redux/slices/headerSlice";
 
-const HeaderSection = () => {
+const HeaderSection = ({ setSelectedVrNo }) => {
   const dispatch = useDispatch();
   // State to hold the selected company
   const [selectedCompany, setSelectedCompany] = useState(null);
@@ -41,13 +41,15 @@ const HeaderSection = () => {
   useEffect(() => {
     if (companies.length > 0 && !selectedCompany) {
       setSelectedCompany(companies[0]); // Set the first company as default
+      setSelectedVrNo(companies[0].vr_no); // Set the vr_no in the parent
     }
-  }, [companies, selectedCompany]);
+  }, [companies, selectedCompany, setSelectedVrNo]);
 
   // Handle the selection from HeaderFilter
   const handleFilterSelection = (selected) => {
     if (selected.length > 0) {
-      setSelectedCompany(selected[0]); // Set the first selected company as the current display
+      setSelectedCompany(selected[0]);
+      setSelectedVrNo(selected[0].vr_no); // Update the vr_no when a new company is selected
     }
   };
 
