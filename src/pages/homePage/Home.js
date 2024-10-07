@@ -1,12 +1,12 @@
 import React from "react";
-import HeaderSection from "./HeaderSection/HeaderSection";
 import DetailsSection from "./DetailsSection/DetailsSection";
+import HeaderSection from "./HeaderSection/HeaderSection";
 
 function Home() {
   return (
     <div>
       <HeaderSection />
-      <DetailsSection />
+      {/* <DetailsSection /> */}
     </div>
   );
 }

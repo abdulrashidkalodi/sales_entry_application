@@ -1,23 +1,30 @@
-// src/redux/slices/headerSlice.js
-import { createSlice } from "@reduxjs/toolkit";
+import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 
-const initialState = {
-  vr_no: "",
-  vr_date: null,
-  ac_name: "",
-  ac_amt: 0,
-  status: "A", // Default status as Active
-};
-
+export const fetchHeader=createAsyncThunk("fetchHeader",async ()=>{
+  const response= await fetch('http://5.189.180.8:8010/header')
+  return response.json();
+})
 const headerSlice = createSlice({
-  name: "header",
-  initialState,
-  reducers: {
-    updateHeader: (state, action) => {
-      return { ...state, ...action.payload };
-    },
+  name: "headerData",
+  initialState:{
+    isLoading:false,
+    data:null,
+    isError:false,
   },
+  extraReducers:(builder)=>{
+    builder.addCase(fetchHeader.pending,(state,action)=>{
+      state.isLoading=true
+    })
+    builder.addCase(fetchHeader.fulfilled,(state,action)=>{
+      state.isLoading=false;
+      state.data=action.payload
+    })
+    builder.addCase(fetchHeader.rejected,(state,action)=>{
+      console.log("error",action.payload);
+      state.isError=true
+      
+    })
+  }
 });
 
-export const { updateHeader } = headerSlice.actions;
 export default headerSlice.reducer;
