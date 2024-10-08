@@ -139,7 +139,7 @@ const HeaderSection = ({ setSelectedVrNo,subtotal }) => {
           </Box>
           <Box sx={{ mr: 2, mb: 1, display: "flex", flexDirection: "column" }}>
             <HeaderFilter ac_name={companies} onSelectionChange={handleFilterSelection} />
-            <Button sx={{ m: 1 }} variant="contained">
+            {/* <Button sx={{ m: 1 }} variant="contained">
               Update
             </Button>
             <Button
@@ -147,12 +147,12 @@ const HeaderSection = ({ setSelectedVrNo,subtotal }) => {
               variant="contained"
             >
               Delete
-            </Button>
+            </Button> */}
             <Button
               sx={{ m: 1, backgroundColor: `success.main` }}
               variant="contained"
             >
-              Create New +
+              Create New Company +
             </Button>
           </Box>
         </Box>

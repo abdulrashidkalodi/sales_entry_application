@@ -13,6 +13,7 @@ import DeleteIcon from "@mui/icons-material/Delete";
 import IconButton from "@mui/material/IconButton";
 import { fetchDetails, deleteDetail } from "../../../redux/slices/detailsSlice";
 import Typography from "@mui/material/Typography";
+import AddNewItem from "../../../component/AddNewItem";
 
 const DetailsSection = ({ selectedVrNo, onSubtotalChange }) => {
   const dispatch = useDispatch();
@@ -74,6 +75,7 @@ const DetailsSection = ({ selectedVrNo, onSubtotalChange }) => {
         <div>Failed to delete item: {deleteError}</div> // Display delete error if any
       ) : (
         <TableContainer sx={{ maxHeight: 440 }}>
+          <AddNewItem />
           <Table stickyHeader aria-label="sticky table">
             <TableHead>
               <TableRow>
