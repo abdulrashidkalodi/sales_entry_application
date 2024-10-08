@@ -9,12 +9,16 @@ import TableBody from "@mui/material/TableBody";
 import TableCell from "@mui/material/TableCell";
 import TableContainer from "@mui/material/TableContainer";
 import TablePagination from "@mui/material/TablePagination";
-import { fetchDetails } from "../../../redux/slices/detailsSlice";
+import DeleteIcon from "@mui/icons-material/Delete";
+import IconButton from "@mui/material/IconButton";
+import { fetchDetails, deleteDetail } from "../../../redux/slices/detailsSlice";
 import Typography from "@mui/material/Typography";
 
 const DetailsSection = ({ selectedVrNo, onSubtotalChange }) => {
   const dispatch = useDispatch();
-  const { data, isLoading, isError } = useSelector((state) => state.details);
+  const { data, isLoading, isError, deleteError } = useSelector(
+    (state) => state.details
+  );
 
   const [page, setPage] = useState(0);
   const [rowsPerPage, setRowsPerPage] = useState(10);
@@ -39,6 +43,11 @@ const DetailsSection = ({ selectedVrNo, onSubtotalChange }) => {
     onSubtotalChange(subtotal); // Call the function to pass the subtotal up to the parent component
   }, [subtotal, onSubtotalChange]);
 
+  // Handle delete
+  const handleDelete = (sr_no) => {
+    dispatch(deleteDetail(sr_no));
+  };
+
   // Handle page change
   const handleChangePage = (event, newPage) => {
     setPage(newPage);
@@ -56,35 +65,43 @@ const DetailsSection = ({ selectedVrNo, onSubtotalChange }) => {
     page * rowsPerPage + rowsPerPage
   );
   return (
-<Paper sx={{ width: "100%", overflow: "hidden", marginTop: 10 }}>
+    <Paper sx={{ width: "100%", overflow: "hidden", marginTop: 10 }}>
       {isLoading ? (
         <div>Loading...</div>
       ) : isError ? (
         <div>Failed to load details.</div>
+      ) : deleteError ? (
+        <div>Failed to delete item: {deleteError}</div> // Display delete error if any
       ) : (
         <TableContainer sx={{ maxHeight: 440 }}>
           <Table stickyHeader aria-label="sticky table">
             <TableHead>
               <TableRow>
-                <TableCell>Vr.No</TableCell>
+                {/* <TableCell>Vr.No</TableCell> */}
                 <TableCell>Sr.No</TableCell>
                 <TableCell>Item Code</TableCell>
                 <TableCell>Item Name</TableCell>
                 <TableCell>Qty</TableCell>
                 <TableCell>Rate</TableCell>
                 <TableCell>Amount</TableCell>
+                <TableCell>Delete</TableCell>
               </TableRow>
             </TableHead>
             <TableBody>
               {paginatedDetails.map((detail) => (
                 <TableRow key={`${detail.vr_no}-${detail.sr_no}`}>
-                  <TableCell>{detail.vr_no}</TableCell>
+                  {/* <TableCell>{detail.vr_no}</TableCell> */}
                   <TableCell>{detail.sr_no}</TableCell>
                   <TableCell>{detail.item_code}</TableCell>
                   <TableCell>{detail.item_name}</TableCell>
                   <TableCell>{detail.qty}</TableCell>
                   <TableCell>{detail.rate}</TableCell>
                   <TableCell>{(detail.qty * detail.rate).toFixed(2)}</TableCell>
+                  <TableCell>
+                    <IconButton onClick={() => handleDelete(detail.sr_no)}>
+                      <DeleteIcon />
+                    </IconButton>
+                  </TableCell>
                 </TableRow>
               ))}
               <TableRow>
@@ -128,7 +145,8 @@ const DetailsSection = ({ selectedVrNo, onSubtotalChange }) => {
         onPageChange={handleChangePage}
         onRowsPerPageChange={handleChangeRowsPerPage}
       />
-    </Paper>  );
+    </Paper>
+  );
 };
 
 export default DetailsSection;
