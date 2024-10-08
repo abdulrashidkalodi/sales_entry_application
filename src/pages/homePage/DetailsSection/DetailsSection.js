@@ -10,8 +10,9 @@ import TableCell from "@mui/material/TableCell";
 import TableContainer from "@mui/material/TableContainer";
 import TablePagination from "@mui/material/TablePagination";
 import { fetchDetails } from "../../../redux/slices/detailsSlice";
+import Typography from "@mui/material/Typography";
 
-const DetailsSection = ({ selectedVrNo }) => {
+const DetailsSection = ({ selectedVrNo, onSubtotalChange }) => {
   const dispatch = useDispatch();
   const { data, isLoading, isError } = useSelector((state) => state.details);
 
@@ -19,21 +20,24 @@ const DetailsSection = ({ selectedVrNo }) => {
   const [rowsPerPage, setRowsPerPage] = useState(10);
 
   useEffect(() => {
+    // Fetch details when the component mounts
     dispatch(fetchDetails());
   }, [dispatch]);
-
-  if (isLoading) {
-    return <div>Loading...</div>;
-  }
-
-  if (isError) {
-    return <div>Failed to load details.</div>;
-  }
-
   // Filter the details based on the selected `vr_no`
   const filteredDetails = data.filter(
     (detail) => detail.vr_no === selectedVrNo
   );
+
+  // Calculate the subtotal dynamically
+  const subtotal = filteredDetails.reduce(
+    (acc, detail) => acc + detail.qty * detail.rate,
+    0
+  );
+
+  // Send the calculated subtotal to the parent component
+  useEffect(() => {
+    onSubtotalChange(subtotal); // Call the function to pass the subtotal up to the parent component
+  }, [subtotal, onSubtotalChange]);
 
   // Handle page change
   const handleChangePage = (event, newPage) => {
@@ -52,23 +56,27 @@ const DetailsSection = ({ selectedVrNo }) => {
     page * rowsPerPage + rowsPerPage
   );
   return (
-    <Paper sx={{ width: "100%", overflow: "hidden", marginTop: 10 }}>
-      <TableContainer sx={{ maxHeight: 440 }}>
-        <Table stickyHeader aria-label="sticky table">
-          <TableHead>
-            <TableRow>
-              <TableCell>Vr.No</TableCell>
-              <TableCell>Sr.No</TableCell>
-              <TableCell>Item Code</TableCell>
-              <TableCell>Item Name</TableCell>
-              <TableCell>Qty</TableCell>
-              <TableCell>Rate</TableCell>
-              <TableCell>Amount</TableCell>
-            </TableRow>
-          </TableHead>
-          <TableBody>
-            {filteredDetails &&
-              filteredDetails.map((detail) => (
+<Paper sx={{ width: "100%", overflow: "hidden", marginTop: 10 }}>
+      {isLoading ? (
+        <div>Loading...</div>
+      ) : isError ? (
+        <div>Failed to load details.</div>
+      ) : (
+        <TableContainer sx={{ maxHeight: 440 }}>
+          <Table stickyHeader aria-label="sticky table">
+            <TableHead>
+              <TableRow>
+                <TableCell>Vr.No</TableCell>
+                <TableCell>Sr.No</TableCell>
+                <TableCell>Item Code</TableCell>
+                <TableCell>Item Name</TableCell>
+                <TableCell>Qty</TableCell>
+                <TableCell>Rate</TableCell>
+                <TableCell>Amount</TableCell>
+              </TableRow>
+            </TableHead>
+            <TableBody>
+              {paginatedDetails.map((detail) => (
                 <TableRow key={`${detail.vr_no}-${detail.sr_no}`}>
                   <TableCell>{detail.vr_no}</TableCell>
                   <TableCell>{detail.sr_no}</TableCell>
@@ -76,14 +84,41 @@ const DetailsSection = ({ selectedVrNo }) => {
                   <TableCell>{detail.item_name}</TableCell>
                   <TableCell>{detail.qty}</TableCell>
                   <TableCell>{detail.rate}</TableCell>
-                  <TableCell>{detail.qty * detail.rate}</TableCell>
+                  <TableCell>{(detail.qty * detail.rate).toFixed(2)}</TableCell>
                 </TableRow>
               ))}
-          </TableBody>
-        </Table>
-      </TableContainer>
-
-      {/* Pagination (Optional, depending on how you want to handle large data sets) */}
+              <TableRow>
+                <TableCell rowSpan={3} />
+                <TableCell colSpan={2}>
+                  <Typography
+                    variant="h6"
+                    sx={{
+                      lineHeight: 1,
+                      fontWeight: 600,
+                      fontSize: "1.3rem !important",
+                    }}
+                  >
+                    Sub Total:
+                  </Typography>
+                </TableCell>
+                <TableCell align="right">
+                  <Typography
+                    variant="h6"
+                    sx={{
+                      lineHeight: 1,
+                      fontWeight: 600,
+                      color: "success.main",
+                      fontSize: "1.3rem !important",
+                    }}
+                  >
+                    + $ {subtotal.toFixed(2)}
+                  </Typography>
+                </TableCell>
+              </TableRow>
+            </TableBody>
+          </Table>
+        </TableContainer>
+      )}
       <TablePagination
         rowsPerPageOptions={[10, 25, 100]}
         component="div"
@@ -93,8 +128,7 @@ const DetailsSection = ({ selectedVrNo }) => {
         onPageChange={handleChangePage}
         onRowsPerPageChange={handleChangeRowsPerPage}
       />
-    </Paper>
-  );
+    </Paper>  );
 };
 
 export default DetailsSection;

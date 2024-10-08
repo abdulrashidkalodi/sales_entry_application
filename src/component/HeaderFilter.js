@@ -1,12 +1,10 @@
 import React, { useState } from "react";
-import Chip from "@mui/material/Chip";
 import Autocomplete from "@mui/material/Autocomplete";
 import TextField from "@mui/material/TextField";
 import Stack from "@mui/material/Stack";
 
-
-export default function HeaderFilter({ ac_name,onSelectionChange }) {
-  const [selectedCompanies, setSelectedCompanies] = useState([]);
+export default function HeaderFilter({ ac_name, onSelectionChange }) {
+  const [selectedCompanies, setSelectedCompanies] = useState([]); // Initialize as an empty array
 
   // Handle the selection of companies
   const handleSelectionChange = (event, newValue) => {
@@ -20,23 +18,20 @@ export default function HeaderFilter({ ac_name,onSelectionChange }) {
         multiple
         id="tags-standard"
         options={ac_name} // Options to show in dropdown
+        value={selectedCompanies} // Set the value to selected companies
         getOptionLabel={(option) => option.ac_name} // Show the ac_name in options
         onChange={handleSelectionChange} // Handle selection
-        renderTags={(value, getTagProps) =>
-          value.map((option, index) => (
-            <Chip
-              label={option.ac_name} // Show ac_name on selected chips
-              {...getTagProps({ index })}
-              key={option.ac_name}
-            />
-          ))
-        }
+        renderTags={() => null} // Remove chips, no labels will show
         renderInput={(params) => (
           <TextField
             {...params}
             variant="standard"
             label="Filter Company"
-            placeholder="Search Company"
+            placeholder={
+              selectedCompanies.length > 0
+              ? selectedCompanies.map((company) => company.ac_name).join(", ") // Display selected companies in the placeholder
+              : "Search Company" // Default placeholder
+            }
           />
         )}
       />

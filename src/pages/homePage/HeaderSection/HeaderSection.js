@@ -13,7 +13,7 @@ import CardContent from "@mui/material/CardContent";
 import HeaderFilter from "../../../component/HeaderFilter";
 import { fetchHeader } from "../../../redux/slices/headerSlice";
 
-const HeaderSection = ({ setSelectedVrNo }) => {
+const HeaderSection = ({ setSelectedVrNo,subtotal }) => {
   const dispatch = useDispatch();
   // State to hold the selected company
   const [selectedCompany, setSelectedCompany] = useState(null);
@@ -134,7 +134,7 @@ const HeaderSection = ({ setSelectedVrNo }) => {
                 fontSize: "2.75rem !important",
               }}
             >
-              + $ {selectedCompany?.ac_amt}
+              + ${subtotal.toFixed(2)}
             </Typography>
           </Box>
           <Box sx={{ mr: 2, mb: 1, display: "flex", flexDirection: "column" }}>
