@@ -75,7 +75,7 @@ const DetailsSection = ({ selectedVrNo, onSubtotalChange }) => {
         <div>Failed to delete item: {deleteError}</div> // Display delete error if any
       ) : (
         <TableContainer sx={{ maxHeight: 440 }}>
-          <AddNewItem />
+          <AddNewItem/>
           <Table stickyHeader aria-label="sticky table">
             <TableHead>
               <TableRow>
