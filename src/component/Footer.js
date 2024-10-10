@@ -7,7 +7,7 @@ function Footer() {
         className="text-center p-3"
         style={{ backgroundColor: "rgba(0, 0, 0, 0.2)" }}
       >
-        &copy; {new Date().getFullYear()} shoping cart :{" "}
+        &copy; {new Date().getFullYear()} sales entry :{" "}
         <a className="text-dark" href="">
           footer section
         </a>

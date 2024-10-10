@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import {
   Button,
@@ -11,24 +11,10 @@ import {
   Typography,
 } from "@mui/material";
 import CloseIcon from "@mui/icons-material/Close";
-import { addItem } from "../redux/slices/detailsSlice";
+import { addItem } from "../redux/slices/addDetailSlice";
 
 const AddNewItem = () => {
-  const dispatch = useDispatch();
-  const { isSuccess,isError } = useSelector((state) => state.data || {});
   const [open, setOpen] = useState(false);
-
-  const [inputValue, setInputValue] = useState({
-    sr_no: "",
-    item_code: "",
-    item_name: "",
-    description: "",
-    qty: "",
-    rate: "",
-  });
-  const handleInput = (e) => {
-    setInputValue({ ...inputValue, [e.target.name]: e.target.value });
-  };
 
   // Open form dialog
   const handleClickOpen = () => {
@@ -38,24 +24,6 @@ const AddNewItem = () => {
   // Close form dialog
   const handleClose = () => {
     setOpen(false);
-    setInputValue({
-      sr_no: "",
-      item_code: "",
-      item_name: "",
-      description: "",
-      qty: "",
-      rate: "",
-    });
-  };
-
-  // Handle form submit
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-    const result = await dispatch(addItem(inputValue));
-
-    if (addItem.fulfilled.match(result)) {
-      setOpen(false); // Close dialog on success
-    }
   };
   return (
     <div>
@@ -68,7 +36,6 @@ const AddNewItem = () => {
       <Dialog open={open} onClose={handleClose} fullWidth maxWidth="sm">
         <DialogTitle>
           Add New Item, for ABC.com.ltd , vr_no:2,
-          {isSuccess && <p>{isSuccess.success}</p>}
           <IconButton
             aria-label="close"
             onClick={handleClose}
@@ -77,7 +44,7 @@ const AddNewItem = () => {
             <CloseIcon />
           </IconButton>
         </DialogTitle>
-        <form onSubmit={handleSubmit}>
+        <form>
           <DialogContent dividers>
             <Typography variant="body1" gutterBottom>
               Please complete this form for add new item.
@@ -92,8 +59,6 @@ const AddNewItem = () => {
               fullWidth
               variant="outlined"
               required
-              value={inputValue.sr_no}
-              onChange={handleInput}
             />
 
             {/* item_code - From item_master table */}
@@ -105,8 +70,6 @@ const AddNewItem = () => {
               fullWidth
               variant="outlined"
               required
-              value={inputValue.item_code}
-              onChange={handleInput}
             />
 
             {/* item_name - From item_master table */}
@@ -118,8 +81,6 @@ const AddNewItem = () => {
               fullWidth
               variant="outlined"
               required
-              value={inputValue.item_name}
-              onChange={handleInput}
             />
 
             {/* description - User Entry */}
@@ -133,8 +94,6 @@ const AddNewItem = () => {
               multiline
               rows={4}
               required
-              value={inputValue.description}
-              onChange={handleInput}
             />
 
             {/* qty - User Entry */}
@@ -146,8 +105,6 @@ const AddNewItem = () => {
               fullWidth
               variant="outlined"
               required
-              value={inputValue.qty}
-              onChange={handleInput}
             />
 
             {/* rate - User Entry */}
@@ -159,8 +116,6 @@ const AddNewItem = () => {
               fullWidth
               variant="outlined"
               required
-              value={inputValue.rate}
-              onChange={handleInput}
             />
           </DialogContent>
           <DialogActions>

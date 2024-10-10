@@ -1,89 +1,126 @@
-// ui 
-import React, { useState, forwardRef } from "react";
-// ** MUI Imports
-import Grid from "@mui/material/Grid";
-import Select from "@mui/material/Select";
-import MenuItem from "@mui/material/MenuItem";
-import TextField from "@mui/material/TextField";
-import InputLabel from "@mui/material/InputLabel";
-import CardContent from "@mui/material/CardContent";
-import FormControl from "@mui/material/FormControl";
-import Button from "@mui/material/Button";
-import DatePicker from "react-datepicker";
-import "react-datepicker/dist/react-datepicker.css";
-import InputAdornment from "@mui/material/InputAdornment";
+import React, { useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import {
+  Button,
+  Dialog,
+  DialogActions,
+  DialogContent,
+  DialogTitle,
+  TextField,
+  IconButton,
+  Typography,
+} from "@mui/material";
+import CloseIcon from "@mui/icons-material/Close";
+import { addItem } from "../redux/slices/addDetailSlice";
 
-// CustomInput component for the DatePicker
-const CustomInput = forwardRef((props, ref) => {
-  return (
-    <TextField
-      fullWidth
-      {...props}
-      inputRef={ref}
-      label="Vr Date"
-      autoComplete="off"
-    />
-  );
-});
 const CreateNewCompany = () => {
-  const [date, setDate] = useState(null);
+  const [open, setOpen] = useState(false);
+
+  // Open form dialog
+  const handleClickOpen = () => {
+    setOpen(true);
+  };
+
+  // Close form dialog
+  const handleClose = () => {
+    setOpen(false);
+  };
+
   return (
-    <CardContent>
-      <form>
-        <Grid container spacing={7}>
-          {/* Input Fields */}
-          <Grid item xs={12} sm={6}>
+    <div>
+      {/* Open Form Button */}
+      <Button
+        variant="contained"
+        sx={{ m: 1, backgroundColor: `success.main` }}
+        onClick={handleClickOpen}
+      >
+        Create New Company +
+      </Button>
+
+      {/* Popup Form using Dialog */}
+      <Dialog open={open} onClose={handleClose} fullWidth maxWidth="sm">
+        <DialogTitle>
+          Create New Company +
+          <IconButton
+            aria-label="close"
+            onClick={handleClose}
+            sx={{ position: "absolute", right: 8, top: 8 }}
+          >
+            <CloseIcon />
+          </IconButton>
+        </DialogTitle>
+        <form >
+          <DialogContent dividers>
+            <Typography variant="body1" gutterBottom>
+              Please complete this form for add new item.
+            </Typography>
+
+            {/* sr_no - Primary Key */}
             <TextField
-              fullWidth
+              name="vr_no"
+              margin="dense"
+              label="company Number (vr_no)"
               type="number"
-              label="Vr No."
-              placeholder="123.."
-              InputProps={{
-                startAdornment: (
-                  <InputAdornment position="start">
-                    {/* <Phone /> */}
-                  </InputAdornment>
-                ),
-              }}
-            />
-          </Grid>{" "}
-          <Grid item xs={12} sm={6}>
-            <FormControl fullWidth>
-              <DatePicker
-                selected={date}
-                showYearDropdown
-                showMonthDropdown
-                placeholderText="MM-DD-YYYY"
-                customInput={<CustomInput />}
-                id="form-layouts-separator-date"
-                onChange={(date) => setDate(date)} // Corrected date handling
-              />
-            </FormControl>
-          </Grid>{" "}
-          <Grid item xs={12} sm={6}>
-            <FormControl fullWidth>
-              <InputLabel>Status</InputLabel>
-              <Select label="Status" defaultValue="SelectLabel">
-                <MenuItem value="Active">A</MenuItem>
-                <MenuItem value="InActive">I</MenuItem>
-              </Select>
-            </FormControl>
-          </Grid>
-          <Grid item xs={12} sm={6}>
-            <TextField
               fullWidth
-              label="Please Enter Company name"
-              placeholder="ABC Pvt. Ltd."
+              variant="outlined"
+              required
             />
-          </Grid>
-          <Grid item xs={12} align="right">
-            <Button variant="contained" sx={{ marginRight: 3.5 }}>
-              Save
+
+            {/* item_code - From item_master table */}
+            <TextField
+              name="vr_date"
+              margin="dense"
+              label="date of creating (vr_date)"
+              type="text"
+              fullWidth
+              variant="outlined"
+              required
+            />
+
+            {/* item_name - From item_master table */}
+            <TextField
+              name="ac_name"
+              margin="dense"
+              label="account Name (ac_name)"
+              type="text"
+              fullWidth
+              variant="outlined"
+              required
+            />
+
+            {/* description - User Entry */}
+            <TextField
+              name="ac_amt"
+              margin="dense"
+              label="amount"
+              type="number"
+              fullWidth
+              variant="outlined"
+              required
+            />
+
+            {/* qty - User Entry */}
+            <TextField
+              name="status"
+              margin="dense"
+              label="status (A or I )"
+              type="number"
+              fullWidth
+              variant="outlined"
+              required
+            />
+          </DialogContent>
+          <DialogActions>
+            <Button onClick={handleClose} color="secondary">
+              Cancel
             </Button>
-          </Grid>
-        </Grid>
-      </form>
-    </CardContent>
+            <Button type="submit" color="primary">
+              Submit
+            </Button>
+          </DialogActions>
+        </form>
+      </Dialog>
+    </div>
   );
 };
 

@@ -10,12 +10,23 @@ import TableCell from "@mui/material/TableCell";
 import TableContainer from "@mui/material/TableContainer";
 import TablePagination from "@mui/material/TablePagination";
 import DeleteIcon from "@mui/icons-material/Delete";
-import IconButton from "@mui/material/IconButton";
-import { fetchDetails, deleteDetail } from "../../../redux/slices/detailsSlice";
-import Typography from "@mui/material/Typography";
-import AddNewItem from "../../../component/AddNewItem";
 
-const DetailsSection = ({ selectedVrNo, onSubtotalChange }) => {
+import {
+  Button,
+  Dialog,
+  DialogActions,
+  DialogContent,
+  DialogTitle,
+  TextField,
+  IconButton,
+} from "@mui/material";
+import Typography from "@mui/material/Typography";
+import CloseIcon from "@mui/icons-material/Close";
+
+import { fetchDetails, deleteDetail } from "../../../redux/slices/detailsSlice";
+
+
+const DetailsSection = ({ selectedVrNo, onSubtotalChange,vr_date, ac_name, ac_amt, status }) => {
   const dispatch = useDispatch();
   const { data, isLoading, isError, deleteError } = useSelector(
     (state) => state.details
@@ -65,6 +76,17 @@ const DetailsSection = ({ selectedVrNo, onSubtotalChange }) => {
     page * rowsPerPage,
     page * rowsPerPage + rowsPerPage
   );
+  const [open, setOpen] = useState(false);
+
+  // Open form dialog
+  const handleClickOpen = () => {
+    setOpen(true);
+  };
+
+  // Close form dialog
+  const handleClose = () => {
+    setOpen(false);
+  };
   return (
     <Paper sx={{ width: "100%", overflow: "hidden", marginTop: 10 }}>
       {isLoading ? (
@@ -75,7 +97,113 @@ const DetailsSection = ({ selectedVrNo, onSubtotalChange }) => {
         <div>Failed to delete item: {deleteError}</div> // Display delete error if any
       ) : (
         <TableContainer sx={{ maxHeight: 440 }}>
-          <AddNewItem/>
+          <div>
+            {/* Open Form Button */}
+            <Button
+              variant="contained"
+              color="primary"
+              onClick={handleClickOpen}
+            >
+              Add New Item
+            </Button>
+
+            {/* Popup Form using Dialog */}
+            <Dialog open={open} onClose={handleClose} fullWidth maxWidth="sm">
+              <DialogTitle>
+                Add New Item, for ABC.com.ltd , vr_no:2,
+                <IconButton
+                  aria-label="close"
+                  onClick={handleClose}
+                  sx={{ position: "absolute", right: 8, top: 8 }}
+                >
+                  <CloseIcon />
+                </IconButton>
+              </DialogTitle>
+              <form>
+                <DialogContent dividers>
+                  <Typography variant="body1" gutterBottom>
+                    Please complete this form for add new item.
+                  </Typography>
+
+                  {/* sr_no - Primary Key */}
+                  <TextField
+                    name="sr_no"
+                    margin="dense"
+                    label="Serial Number (sr_no)"
+                    type="number"
+                    fullWidth
+                    variant="outlined"
+                    required
+                  />
+
+                  {/* item_code - From item_master table */}
+                  <TextField
+                    name="item_code"
+                    margin="dense"
+                    label="Item Code (item_code)"
+                    type="text"
+                    fullWidth
+                    variant="outlined"
+                    required
+                  />
+
+                  {/* item_name - From item_master table */}
+                  <TextField
+                    name="item_name"
+                    margin="dense"
+                    label="Item Name (item_name)"
+                    type="text"
+                    fullWidth
+                    variant="outlined"
+                    required
+                  />
+
+                  {/* description - User Entry */}
+                  <TextField
+                    name="description"
+                    margin="dense"
+                    label="Description"
+                    type="text"
+                    fullWidth
+                    variant="outlined"
+                    multiline
+                    rows={4}
+                    required
+                  />
+
+                  {/* qty - User Entry */}
+                  <TextField
+                    name="qty"
+                    margin="dense"
+                    label="Quantity (qty)"
+                    type="number"
+                    fullWidth
+                    variant="outlined"
+                    required
+                  />
+
+                  {/* rate - User Entry */}
+                  <TextField
+                    name="rate"
+                    margin="dense"
+                    label="Rate (rate)"
+                    type="number"
+                    fullWidth
+                    variant="outlined"
+                    required
+                  />
+                </DialogContent>
+                <DialogActions>
+                  <Button onClick={handleClose} color="secondary">
+                    Cancel
+                  </Button>
+                  <Button type="submit" color="primary">
+                    Submit
+                  </Button>
+                </DialogActions>
+              </form>
+            </Dialog>
+          </div>
           <Table stickyHeader aria-label="sticky table">
             <TableHead>
               <TableRow>

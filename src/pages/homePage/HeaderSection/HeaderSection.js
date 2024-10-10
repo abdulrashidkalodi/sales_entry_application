@@ -12,8 +12,9 @@ import CardContent from "@mui/material/CardContent";
 // Custom Component
 import HeaderFilter from "../../../component/HeaderFilter";
 import { fetchHeader } from "../../../redux/slices/headerSlice";
+import CreateNewCompany from "../../../component/CreateNewCompany";
 
-const HeaderSection = ({ setSelectedVrNo,subtotal }) => {
+const HeaderSection = ({ setSelectedVrNo, subtotal }) => {
   const dispatch = useDispatch();
   // State to hold the selected company
   const [selectedCompany, setSelectedCompany] = useState(null);
@@ -104,7 +105,7 @@ const HeaderSection = ({ setSelectedVrNo,subtotal }) => {
               >
                 {selectedCompany?.status?.[0]?.toUpperCase() || "A"}
               </Avatar>
-              <Avatar
+              {/* <Avatar
                 sx={{
                   m: 1,
                   width: 38,
@@ -116,7 +117,7 @@ const HeaderSection = ({ setSelectedVrNo,subtotal }) => {
                 }}
               >
                 {selectedCompany?.status?.[0]?.toUpperCase() || "I"}
-              </Avatar>
+              </Avatar> */}
             </Box>
             <Typography variant="h4">
               vr.No: {selectedCompany?.vr_no}
@@ -138,22 +139,12 @@ const HeaderSection = ({ setSelectedVrNo,subtotal }) => {
             </Typography>
           </Box>
           <Box sx={{ mr: 2, mb: 1, display: "flex", flexDirection: "column" }}>
-            <HeaderFilter ac_name={companies} onSelectionChange={handleFilterSelection} />
-            {/* <Button sx={{ m: 1 }} variant="contained">
-              Update
-            </Button>
-            <Button
-              sx={{ m: 1, backgroundColor: `error.main` }}
-              variant="contained"
-            >
-              Delete
-            </Button> */}
-            <Button
-              sx={{ m: 1, backgroundColor: `success.main` }}
-              variant="contained"
-            >
-              Create New Company +
-            </Button>
+            <HeaderFilter
+              ac_name={companies}
+              onSelectionChange={handleFilterSelection}
+            />
+            {/* create new company */}
+            <CreateNewCompany />
           </Box>
         </Box>
       </CardContent>
